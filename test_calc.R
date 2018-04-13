@@ -9,9 +9,8 @@
 #
 
 #File path that is to be opened and checked to see if in FASTA format
-openFile <- file("reformated_3t24.fa", open = "r")
-
-test_calc_format <- function(openFile){
+test_calc_format <- function(f_to_open){
+  openFile <- file(f_to_open, open = "r")
   #Counter variables to see if the number of sequences = the number of "titles"
   count_carrot <- 0
   count_seq <- 0
@@ -30,6 +29,9 @@ test_calc_format <- function(openFile){
     else{
       count_seq <- count_seq + 1
     }
+    if(i == 2*openFile){
+      break
+    }
   }
   #closes the file
   close(openFile)
@@ -42,4 +44,3 @@ test_calc_format <- function(openFile){
     print("FAIL")
   }
 }
-
