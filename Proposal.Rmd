@@ -3,23 +3,23 @@ title: "Proposal"
 author: "Jaden Anderson"
 date: "April 12, 2018"
 output: html_document
+bibliography: bib.bib
 
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(knitr)
-library(seqinr)
 ```
 
 # Introduction
 
 Selection pressures can be analyzed in a variety of fashions. Many studies have been done studying genetic drift of ecological populations or positive/negative selection on specific genes of interest in order to understand their evolutionary history and progression. Here I propose a unique and complicated case of evolution: Outer membrane beta barrels (OMBBs). 
 
-Gram negative bacteria have a unique arrangement of membranes that help them persist in their enviornment: an outer and inner membrane. On these membranes exist a variety of proteins and structures that have a range of functions that the bacteria utilize. Outer membrane proteins are used to interact with their extracellular enviornment that have a diverse array of functions like import and export of substances, cell adhesion, proteolysis, membrane protein insertion, and more. Even though proteins on the outer membrane have a variety of functions, surprisingly the secondary structure of these proteins (i.e. the structure of what the proteins look like) are very similar. While these secondary structures are highly similar, their sequence composition (or similarity) is highly variable which makes studying their evolution very difficult. The most notable difference between the OMBBs is the number of strands which has illuminated a unique conservation pattern, most notiably seen in the 16 stranded barrels where the N-terminal half of the protein is unconserved and varies greatly and the C-terminal half is highly conserved and varies little.![_Figure 1:_ This figure is taken from "The Complex Evolution of Outer Membrane Proteins" which is sited in this proposal. This figure illustrates the unique conservation pattern found by the authors. Here when we look at conserved strand identity, we can see a low level of conservation through strands 1-8 and an increase in strand conservation in in strands 9-16. This interesting conservation pattern may be due to a unique combination of selection pressures on the 16 stranded barrels.](c_term_conservation.png) Using this data, my hyposthesis is that the 16 stranded OMBBs may under go multiple selection patterns which would be an interesting occurance that would warrant more study. 
+Gram negative bacteria have a unique arrangement of membranes that help them persist in their enviornment: an outer and inner membrane. On these membranes exist a variety of proteins and structures that have a range of functions that the bacteria utilize[@Remmert2010]. Outer membrane proteins are used to interact with their extracellular enviornment that have a diverse array of functions like import and export of substances, cell adhesion, proteolysis, membrane protein insertion, and more. Even though proteins on the outer membrane have a variety of functions, surprisingly the secondary structure of these proteins (i.e. the structure of what the proteins look like) are very similar[@Franklin, @article]. While these secondary structures are highly similar, their sequence composition (or similarity) is highly variable which makes studying their evolution very difficult. The most notable difference between the OMBBs is the number of strands which has illuminated a unique conservation pattern, most notiably seen in the 16 stranded barrels where the N-terminal half of the protein is unconserved and varies greatly and the C-terminal half is highly conserved and varies little[@Franklin].![_Figure 1:_ This figure is taken from "The Complex Evolution of Outer Membrane Proteins" which is sited in this proposal. This figure illustrates the unique conservation pattern found by the authors. Here when we look at conserved strand identity, we can see a low level of conservation through strands 1-8 and an increase in strand conservation in in strands 9-16. This interesting conservation pattern may be due to a unique combination of selection pressures on the 16 stranded barrels.](c_term_conservation.png) Using this data, my hyposthesis is that the 16 stranded OMBBs may under go multiple selection patterns which would be an interesting occurance that would warrant more study. 
 
 # Proposed Methods
-Looking at patterns of conservation, we can start to address some possible directions for selection pressures. In order to determine if a protein is undergoing positive or negative selection we can calculate the ratio of nonsynonmous mutations (amino acid changes at that position) to synonymous mutations (amino acid does not change at that position) or better known as dN/dS ratios (or Ka/Ks). There exists a package in R called seqinr and in this package exists a function called kaks that will calculated dN/dS ratios. The rough formula for calculating this ratio is $\omega = dN/dS \approx (selection + neutral)/neutral $ where selection is roughly equal to the average number of substituions in aligned sequences and neutral is the evolutionary distance between the sequences ignoring selection (i.e. synonymous mutations). If dN/dS is around 1, selection has not occured on the sequences and there is no "selection pressures" by these means, if it is lower than 1 there is negative selection or changes in the sequences are selected against (conservation of sequence) and if it is higher than 1 there is positive selection or changes in the sequences are selected for. Using these ratios we can try to piece together the selection pressures on the 16 stranded OMBBs. One possibility is that the N-terminal half (strands 1-8) undergo positive selection as their sequence conservation is low and the C-terminal half (strands 9-16) undergo negative selection as their sequence conservation is high. The overal hypotheses I have are outlined in table 1.
+Looking at patterns of conservation, we can start to address some possible directions for selection pressures. In order to determine if a protein is undergoing positive or negative selection we can calculate the ratio of nonsynonmous mutations (amino acid changes at that position) to synonymous mutations (amino acid does not change at that position) or better known as dN/dS ratios (or Ka/Ks). There exists a package in R called seqinr and in this package exists a function called kaks that will calculated dN/dS ratios. The rough formula for calculating this ratio is $\omega = dN/dS \approx (selection + neutral)/neutral $ where selection is roughly equal to the average number of substituions in aligned sequences and neutral is the evolutionary distance between the sequences ignoring selection (i.e. synonymous mutations) [@Kryazhimskiy2008]. If dN/dS is around 1, selection has not occured on the sequences and there is no "selection pressures" by these means, if it is lower than 1 there is negative selection or changes in the sequences are selected against (conservation of sequence) and if it is higher than 1 there is positive selection or changes in the sequences are selected for [@Kryazhimskiy2008]. Using these ratios we can try to piece together the selection pressures on the 16 stranded OMBBs. One possibility is that the N-terminal half (strands 1-8) undergo positive selection as their sequence conservation is low and the C-terminal half (strands 9-16) undergo negative selection as their sequence conservation is high. The overal hypotheses I have are outlined in table 1.
 
 --------------------------------------
 ```{r, hypothesis_table, echo = FALSE}
@@ -30,4 +30,23 @@ kable(hypothesis_table, caption = "_Table 1._ This table outlines the main selec
 ```
 --------------------------------------
 
-# Performing Unit Tests
+# Using kaks function
+
+Using the unit tests provided in Tests.Rmd, I can test whether or not my sequences fit the same size, format and gap criteria. If all unit tests produce a pass, I can continue on to use the kaks function in sequinr to calculate dN/dS ratios. 
+
+```{r, calculate_dN/dS, echo=TRUE} 
+library(seqinr)
+align <- read.alignment("reformated_3t24.fa", format = "fasta")
+
+matrix <- kaks(align)
+matrix
+
+```
+
+Using the kaks function in R produces matrix values close to 10. Unfortunately, this means that the information provided in the alignment is not enough in order to calculate an accuarte dN/dS ratio. 
+
+# Future Directions for Final Project
+
+Upon further reading, the kaks function is also based on the whole protein sequence and does not allow for much customization in ranges of protein sequences. If one recalls, my main interest is splitting the protein up by strands 1-8 and strands 9-16 and observing the selection pressures on the proteins. In order to do so accurately, I can use the software called PAML which is designed for more specific needs when doing evolutionary calculations [@Kryazhimskiy2008]. For my final project, I plan on spliting the barrels up by specific strands, calculating dN/dS ratios for each set, and importing the data into R to plot and visualize the results. I also must get more sequences in order to have enough information for calculations as it seems 3 is not enough for results. I will set up blastp from the NCBI database in order to grab more sequences (around 100) for 16 stranded OMBBs in order to have enough information for the calculations. Now that the unit tests are set up, it should be relatively simple to feed my sequences through to test my requirements before importing the sequences to PAML. 
+
+# References
