@@ -7,5 +7,70 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(seqinr)
+#Input customizaed multiple sequence alignment
+msa <- c('HHHHHQSEFIKDSKASIELRNFYFNRDFRQEGASQSKAEEWAQGFLLRYESGYTEGTIGFGVDAIGLLGVKLDSSPDRSGTGLLKRDRETGRAQDDYGEGITAKLRASKSTLKIGTLTPKLPVIMPNDSRLLPQTFQGGALNSMEIDGLTLDAGRLKKVNQRDSSDNEDMTITGGGKRQIVVRSGLTSDKFDFAGGSYKWTDNLSTSYHYGKLDNFYKQHYLGLVHTLPIADKQSLKSDIRWARSTDDGSSNVDNKALNAMFTYSLGYHAFGVGYQKMSGDTGFAYINGADPYLVNFIIGDFANKDEKSWQARYDYNFAGVGIPGLTFMTRYVKGDNIDLLTTSGEGKEWERDMDIAYVFQSGPLKNLGVKWRNATMRTNYTNDYDENRLIVSYTLPL-', 'AGFLEDSKASLETRNFYMNRDFRDGPGQSKREEWAQGFILNLQSGYTQGTVGFGLDAMGMLGVKLDSGRGRSGTGLLPKDSDGRAPDTYSKLGLTAKVKVSQSELKVGTLIPKLPSVQPNNGRIFPQIFEGALLTSKEIKDLGFTAGRLEKTKIRDSSDSEDLALNDKNGRFAGVSADHFDLGGLDYKLTDQLTASYHYSNLQDVYRQHFVGLLHSWPIGPGELTSDLRFARSTDSGSAKAGGIDNKSLNGMFTYSLGNHAFGAAWQRMNGDDAFPYLEGSNPYLVNFVQVNDFAGPKERSWQLRYDYDFVGLGIPGLTFMTRYVKGDNVELAGQSGEGREWERNTELQYVFQSGALKNLGIRWRNATFRSNFTRDIDENRLIVSYTLPIWGGHHHHHH', 'EFLADSSAHLDLRNFYQLRDYRQHDAPQSQAGNWSQGFVLRLQSGFTGGPLGFGLDATGLLGVKLDSGRGRSNDGTLPFGANSKEPVDDYSHLGLTAKLRYSQTQLQVGILMPQLPVAFRDDVRLLPQTFDGALLTSSEIEGLTLTAGQLWKSRTRESAGSDDMYIMGRDKAHASDEFNLAGATYAFTPRLSASYYYGQLKDIYRQHYLGLLHTLPLGEGLSLRSDLRYFDSGEDGAAISGPVDNRNLNAMLTLRAGAHAFGIGVQKMIGNDAFPVLNGYTTPYVANLMAYQTFTRPQEKSWQLRYDYDFAGLGLPGLNLMTRYVQGRDIDRGAGRADDSEWERNTDLSYVIQSGPLKSVALKWRNITYRSRYGADLDENRFIVNYTLKLWGGHHHHHH')
 ```
 
+# Tests Needed for Unit Testing
+
+Analyzing this kind of data for evolutionary studies can be tricky. In order to do most calculations, a square matrix must be generated from the aligned sequence. Since the matrix is square, that must mean that all sequences in the alignment for dN/dS calculation must be the same size. If the sequences are not the same size, gaps or - must be inserted in order to create the square matrix. 
+
+Tests that need to be done:
+
+1) Check sequences that are read through to make sure they are the same size
+2) Check to see if gaps in the sequences are at a tolerable level in order to make accurate calculations
+3) Check to see if the alignment format is in FASTA format for the calculations
+
+# 1) Check sequences that are read through to make sure they are the same size
+
+In order to check to see if sequences in the alignment are the same size, I must loop through each sequence and compare the length of characters of two sequences. This is a relatively simple thing to do, but is arguably the most important test that needs to be done in order for the success of this analysis. If one sequence is not the same size, the analyses will not run which will end up breaking the code and leave me to search through hundreds of sequences to find the culprit. 
+
+_Psuedocode for this test:_
+
+1) Read in alignment, create a checker variable, and counter variable
+2) Loop through alignment from 2:length(alignment)
+  _Important note_: I loop from 2:length(alignment) because in the next step, I will be comparing i to i-1, this ensures I don't go out of bounds when looping and prevents errors in the code. 
+3) check length of sequence at position i with sequence at i -1
+4) If the sequence is the same keep checker true and increment counter by 1. If the sequence is not the same, change checker to false, break out of the loop and print counter to indicate which sequence is messed up. 
+
+```{r, check_size}
+source("same_size.R")
+
+#same_size(msa)
+
+```
+
+# 2) Check to see if gaps in the sequences are at a tolerable level in order to make accurate calculations
+In order to see if the proteins are suitable for use in calculation after checking to see if the sequences are the same, the number of gaps in the sequences must be considered. Gaps in multiple sequence alignments are represented by the - character. For this test must be done in order to ensure the data will be reliable and "missing" values won't hinder the calculations. For this test, I will only allow sequenecs with less than 10 gaps through the analysis. 10 was chosen as an arbitrary cutoff since it is difficult to gauge how much "gappiness" in a sequence will hinder the accuracy of the data. 
+
+_Pseudocode for this test_
+
+1) Read in alignment, create a checker variable, and a counter
+2) Loop through the sequences
+3) Check the number of times - appears in 1 sequence
+4) If number is less than 10, sequence is good for calculation, and continue looping through sequences. If number is greater than 10, sequence is probably not suitable for calculation, set checker to false, break loop and print counter to denote which sequence has an issue
+
+```{r, is_protein_gappy}
+source("is_protein.R")
+
+#is_protein(msa)
+```
+
+# 3) Check to see if format is correct for test calculation
+In order for the function kaks in seqinr to work properly I have to make sure my alignments are in FASTA format. There are a variety of formats the choose from when it comes to multiple sequence alignments, however since I'm customizing my alignments to this specific study, I must check to make sure all of the sequences are in the right format, otherwise the code will not run properly. FASTA format is a very specific format for sequences, it contains a > with some unique identifiers for the specific gene or protein of interest on one line, and then the next line contains sequences. Here we can either check just specifically for > on one line and search for amino acids for the next line to denote sequence. A unique property of FASTA files is that they're always even so I can check 2 lines at once by incrementing by 2.
+
+_Pseudocode for this test_
+
+1) Read in alignment, create a checker variable, and a counter
+2) Loop through a suposed FASTA format file
+3) Check to see if the first line has a > at the beginning. If yes, then check the i+1 position for amino acids and then increment by 2, increment counter
+4) If the first line does not start with >, set checker to FALSE, print counter and break from loop.
+
+```{r, test_calc_format}
+source("test_calc.R")
+
+#test_calc(align_proteins)
+```
+
+If all of these tests pass then I'm good to start making dN/dS calculations. 
