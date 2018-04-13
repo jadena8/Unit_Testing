@@ -1,0 +1,5 @@
+N-terminal	C-terminal
+Positive	Negative
+None	Negative
+Positive	None
+None	None
