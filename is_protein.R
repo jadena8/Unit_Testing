@@ -9,5 +9,51 @@
 #
 
 is_protein <- function(msa) {
+#This function counts how many gaps are in a sequence and checks if they're at a tolerable level
   
+  #Counter tells you which sequence you're at, if the code breaks, count will print to the screen the location of the sequence in the vector that is too gappy
+  counter <- 1
+  #The PASS/FAIL variable
+  checker <- TRUE
+  #Counts the number of gaps in a sequence
+  gap_counter <- 0
+  
+  #Loop through each sequence in the alignment
+  for(i in 1:length(msa)){
+    #split the sequence into a new vector to count number of gaps
+    split_sequence <- strsplit(msa[i], "")[[1]]
+    
+    #Loop over that new sequence vector
+    for(j in 1:nchar(msa[i])){
+      
+      #Count the number of gaps in the new sequence
+      if(split_sequence[[j]] == '-') {
+        gap_counter <- gap_counter + 1
+      }
+      
+      #If the sequence fails to gap threshold, then break out of the loops and print the position of the sequence in the vector that is too gappy
+      if(gap_counter > 10){
+        checker <- FALSE
+        cat(counter, "\n")
+        break
+      }
+      if(checker == FALSE){
+        break
+      }
+    }
+    
+    #Increment counter and reset gap counter
+    counter <- counter + 1
+    gap_counter <- 0
+  }
+
+#Prints the pass or fail message to the console
+if(checker == TRUE){
+  cat("PASS")
 }
+else{
+  cat("FAIL")
+}
+}
+
+
