@@ -333,7 +333,9 @@ $(document).ready(function () {
 </ol>
 <pre class="r"><code>source(&quot;same_size.R&quot;)
 
-#same_size(msa)</code></pre>
+same_size(msa)</code></pre>
+<pre><code>## PASS</code></pre>
+<pre><code>## [1] TRUE</code></pre>
 </section>
 <section id="check-to-see-if-gaps-in-the-sequences-are-at-a-tolerable-level-in-order-to-make-accurate-calculations" class="level1">
 <h1>2) Check to see if gaps in the sequences are at a tolerable level in order to make accurate calculations</h1>
@@ -347,7 +349,8 @@ $(document).ready(function () {
 </ol>
 <pre class="r"><code>source(&quot;is_protein.R&quot;)
 
-#is_protein(msa)</code></pre>
+is_protein(msa)</code></pre>
+<pre><code>## PASS</code></pre>
 </section>
 <section id="check-to-see-if-format-is-correct-for-test-calculation" class="level1">
 <h1>3) Check to see if format is correct for test calculation</h1>
@@ -361,7 +364,7 @@ $(document).ready(function () {
 </ol>
 <pre class="r"><code>source(&quot;test_calc.R&quot;)
 
-#test_calc(align_proteins)</code></pre>
+#test_calc_format(f_to_open)</code></pre>
 <p>If all of these tests pass then I’m good to start making dN/dS calculations.</p>
 </section>
 
