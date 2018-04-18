@@ -2,6 +2,7 @@
 #If the sequences do have large gaps, then they will fail the unit test
 #
 #Input: msa <- a multiple sequence alignment read in from a file or pasted, MUST NOT BE IN TRADITIONAL FORMATS, sequences only
+#***DAN: It would not hurt to have a more precise description of the format of msa
 #Output: A PASS or FAIL to see if the sequences passed or failed the unit test
 #           if failed: the code will also print out the sequence number that failed the unit test
 #

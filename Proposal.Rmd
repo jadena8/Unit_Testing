@@ -4,8 +4,14 @@ author: "Jaden Anderson"
 date: "April 12, 2018"
 output: html_document
 bibliography: bib.bib
-
 ---
+
+<!--***DAN: search for ***DAN in all files to see my comments-->
+
+<!--***DAN: In principle this is an OK starting point for a proposal, but I have a couple cautions. Te first is, make sire what you end up dong as this develops is sufficiently computational. There is the risk right now you will just end up doing a couple quick checks of your code and then calling some package code. That won't be enough. Second, it seemed like the work you did for this proposal convinced you your original ideas were not going to fly because you got values close to 10 from kaks. That sends you back to the drawing board, and the last part of your proposal does indicate some other ideas for getting started again. But make sure you leave enough time to do a propoer job with this final project, because you have already been sent back to the drawing board (so you are behind) and there is the possibility there will be additional setback.-->
+
+<!--***DAN: your overall grade is 10/10 because the grading policy on these assignments is to give full credit for effortful completion of all parts of ther assignment, and you did that. But it should be clear from my comments that you missed the point on some of the major parts of the assignment. So I highly recommend you allocate some time to going back and reviewing the unit testing ideas we learned.-->
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)

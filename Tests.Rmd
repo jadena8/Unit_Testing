@@ -5,6 +5,16 @@ date: "April 12, 2018"
 output: html_document
 ---
 
+<!--***DAN: search for ***DAN in all files to see my comments-->
+
+<!--***DAN: Only two of your three functions had specs without function guts filled at the halfway tag, the third had it's guts already, indicating you had written the function at that point. This is no big deal, real, people do it both ways, but it violates the spirit of the assignment, which wass to see what it is like to write the tests before the functions.-->
+
+<!--***DAN: Also, at the halfway point, Tests.Rmd was not code, but was rather a bunch of notes and pseudocode on how to carry out tests. This again violates the spirit - if you actually write the *code* of the tests before writing the guts of the function it helps nail down the design, preventing bugs.-->
+
+<!--***DAN: Looking at your Tests.Rmd doc, you seem to have missed the point of the unit tests entirely. You seem to have written functions that carry out tests of *something* in the .R files, in the sense that you just call these functions and they return pass or fail. BUT, these are supposed to be the functions themselves, which are tested using code in Tests.R. What are your functions that you will use in Prpoposal.Rmd? It appears you have written functions which test various assumptions about your data which are necessary before you can call some other functions in some package. This is not unit testing of either functions you wrote or code such as kaks in the seqinr package, this is prior analysis of your data to see if they are suitable for using certain methods! This is something else entirely... I don't see what else to do besides recommend that you re-watch all the unit testing lectures and reread that material. The idea was to spec functions in the .R files that would be useful for carrying out your analysis, and then to write tests OF THOSE FUNCTIONS, and then to write the functions and carry out the tests to see if the functions are written correctly.-->
+
+<!--***DAN: After reading your proposal, it seems to me your .R files are your functions, and their purpose is to screen your data in certain ways before calling some R package code. That's fine. But then the unit tests should include some made-up, simple sequences that you call your functions on to be sure they are correctly catching suitable versus unsuitable data. This is a bit confusing, because you functions are tests of data suitability and your unit tests should be tests of those functions to see if they flag datasets correctly as acceptable/unacceptable. So talk to me if you are confused, please and I will explain more. You cannot test if the functions work without at least a few made-up datasets that are acceptable, and should be so recognized by the functions, and a few that are unacceptable, and should be so recognized.-->
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(seqinr)
